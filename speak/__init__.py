@@ -24,8 +24,11 @@ net_g_ms = SynthesizerTrn(
 _ = net_g_ms.eval()
 _ = utils.load_checkpoint(model, net_g_ms, None)
 
-def get_text(text, hps):
-    text_norm = text_to_sequence(text, hps.symbols, hps.data.text_cleaners)
+def get_text(text, hps, cleaned=False):
+    if cleaned:
+        text_norm = text_to_sequence(text, hps.symbols, [])
+    else:
+        text_norm = text_to_sequence(text, hps.symbols, hps.data.text_cleaners)
     if hps.data.add_blank:
         text_norm = commons.intersperse(text_norm, 0)
     text_norm = LongTensor(text_norm)
@@ -33,11 +36,21 @@ def get_text(text, hps):
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     text = req.params.get('text')
-    if not text:
+    cleantext = req.params.get('cleantext')
+    if not text and not cleantext:
         return func.HttpResponse(
              "400 BAD REQUEST: null text",
              status_code=400
         )
+    if text and cleantext:
+        return func.HttpResponse(
+             "400 BAD REQUEST: text and cleantext cannot be set both",
+             status_code=400
+        )
+    cleaned = False
+    if cleantext:
+        cleaned = True
+        text = cleantext
     speaker_id = req.params.get('id')
     if not speaker_id:
         return func.HttpResponse(
@@ -52,7 +65,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
              status_code=400
         )
     try:
-        stn_tst = get_text(unquote(text), hps_ms)
+        stn_tst = get_text(unquote(text), hps_ms, cleaned)
     except:
         return func.HttpResponse(
             "400 BAD REQUEST: invalid text",
