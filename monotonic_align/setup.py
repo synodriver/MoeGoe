@@ -30,7 +30,6 @@ ext_modules = [
         extra_link_args=extra_link_args,
     )
 ]
-print(ext_modules)
 
 setup(
     name="monotonic_align",
