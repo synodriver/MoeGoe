@@ -1,40 +1,7 @@
 import logging
-import json
-import torch
+from json import loads
+from torch import load
 import logging
-
-
-def load_checkpoint(checkpoint_path, model):
-  checkpoint_dict = torch.load(checkpoint_path, map_location='cpu')
-  iteration = checkpoint_dict['iteration']
-  saved_state_dict = checkpoint_dict['model']
-  if hasattr(model, 'module'):
-    state_dict = model.module.state_dict()
-  else:
-    state_dict = model.state_dict()
-  new_state_dict= {}
-  for k, v in state_dict.items():
-    try:
-      new_state_dict[k] = saved_state_dict[k]
-    except:
-      logging.info("%s is not in the checkpoint" % k)
-      new_state_dict[k] = v
-  if hasattr(model, 'module'):
-    model.module.load_state_dict(new_state_dict)
-  else:
-    model.load_state_dict(new_state_dict)
-  logging.info("Loaded checkpoint '{}' (iteration {})" .format(
-    checkpoint_path, iteration))
-  return
-
-
-def get_hparams_from_file(config_path):
-  with open(config_path, "r") as f:
-    data = f.read()
-  config = json.loads(data)
-
-  hparams =HParams(**config)
-  return hparams
 
 
 class HParams():
@@ -67,3 +34,36 @@ class HParams():
 
   def __repr__(self):
     return self.__dict__.__repr__()
+
+
+def load_checkpoint(checkpoint_path, model):
+  checkpoint_dict = load(checkpoint_path, map_location='cpu')
+  iteration = checkpoint_dict['iteration']
+  saved_state_dict = checkpoint_dict['model']
+  if hasattr(model, 'module'):
+    state_dict = model.module.state_dict()
+  else:
+    state_dict = model.state_dict()
+  new_state_dict= {}
+  for k, v in state_dict.items():
+    try:
+      new_state_dict[k] = saved_state_dict[k]
+    except:
+      logging.info("%s is not in the checkpoint" % k)
+      new_state_dict[k] = v
+  if hasattr(model, 'module'):
+    model.module.load_state_dict(new_state_dict)
+  else:
+    model.load_state_dict(new_state_dict)
+  logging.info("Loaded checkpoint '{}' (iteration {})" .format(
+    checkpoint_path, iteration))
+  return
+
+
+def get_hparams_from_file(config_path):
+  with open(config_path, "r") as f:
+    data = f.read()
+  config = loads(data)
+
+  hparams = HParams(**config)
+  return hparams
