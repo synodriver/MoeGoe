@@ -37,7 +37,7 @@ def get_speaker_id(message):
     try:
         speaker_id = int(speaker_id)
     except:
-        print(str(speaker_id) + ' is not a valid ID!')
+        print(f'{speaker_id} is not a valid ID!')
         sys.exit(1)
     return speaker_id
 

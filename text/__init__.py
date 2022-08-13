@@ -12,21 +12,16 @@ def text_to_sequence(text, symbols, cleaner_names):
   '''
   _symbol_to_id = {s: i for i, s in enumerate(symbols)}
 
-  sequence = []
-
   clean_text = _clean_text(text, cleaner_names)
-  for symbol in clean_text:
-    if symbol not in _symbol_to_id.keys():
-      continue
-    symbol_id = _symbol_to_id[symbol]
-    sequence += [symbol_id]
-  return sequence
+  return [
+      _symbol_to_id[symbol] for symbol in clean_text if symbol in _symbol_to_id
+  ]
 
 
 def _clean_text(text, cleaner_names):
   for name in cleaner_names:
-    cleaner = getattr(cleaners, name)
-    if not cleaner:
-      raise Exception('Unknown cleaner: %s' % name)
-    text = cleaner(text)
+    if cleaner := getattr(cleaners, name):
+      text = cleaner(text)
+    else:
+      raise Exception(f'Unknown cleaner: {name}')
   return text
