@@ -1,5 +1,6 @@
 """ from https://github.com/keithito/tacotron """
 
+
 '''
 Cleaners are transformations that run over the input text at both training and eval time.
 
@@ -53,61 +54,61 @@ _abbreviations = [(re.compile('\\b%s\\.' % x[0], re.IGNORECASE), x[1]) for x in 
 ]]
 
 # List of (hangul, hangul divided) pairs:
-_hangul_divided = [(re.compile('%s' % x[0]), x[1]) for x in [
-  ('ㄳ', 'ㄱㅅ'),
-  ('ㄵ', 'ㄴㅈ'),
-  ('ㄶ', 'ㄴㅎ'),
-  ('ㄺ', 'ㄹㄱ'),
-  ('ㄻ', 'ㄹㅁ'),
-  ('ㄼ', 'ㄹㅂ'),
-  ('ㄽ', 'ㄹㅅ'),
-  ('ㄾ', 'ㄹㅌ'),
-  ('ㄿ', 'ㄹㅍ'),
-  ('ㅀ', 'ㄹㅎ'),
-  ('ㅄ', 'ㅂㅅ'),
-  ('ㅘ', 'ㅗㅏ'),
-  ('ㅙ', 'ㅗㅐ'),
-  ('ㅚ', 'ㅗㅣ'),
-  ('ㅝ', 'ㅜㅓ'),
-  ('ㅞ', 'ㅜㅔ'),
-  ('ㅟ', 'ㅜㅣ'),
-  ('ㅢ', 'ㅡㅣ'),
-  ('ㅑ', 'ㅣㅏ'),
-  ('ㅒ', 'ㅣㅐ'),
-  ('ㅕ', 'ㅣㅓ'),
-  ('ㅖ', 'ㅣㅔ'),
-  ('ㅛ', 'ㅣㅗ'),
-  ('ㅠ', 'ㅣㅜ')
+_hangul_divided = [(re.compile(f'{x[0]}'), x[1]) for x in [
+    ('ㄳ', 'ㄱㅅ'),
+    ('ㄵ', 'ㄴㅈ'),
+    ('ㄶ', 'ㄴㅎ'),
+    ('ㄺ', 'ㄹㄱ'),
+    ('ㄻ', 'ㄹㅁ'),
+    ('ㄼ', 'ㄹㅂ'),
+    ('ㄽ', 'ㄹㅅ'),
+    ('ㄾ', 'ㄹㅌ'),
+    ('ㄿ', 'ㄹㅍ'),
+    ('ㅀ', 'ㄹㅎ'),
+    ('ㅄ', 'ㅂㅅ'),
+    ('ㅘ', 'ㅗㅏ'),
+    ('ㅙ', 'ㅗㅐ'),
+    ('ㅚ', 'ㅗㅣ'),
+    ('ㅝ', 'ㅜㅓ'),
+    ('ㅞ', 'ㅜㅔ'),
+    ('ㅟ', 'ㅜㅣ'),
+    ('ㅢ', 'ㅡㅣ'),
+    ('ㅑ', 'ㅣㅏ'),
+    ('ㅒ', 'ㅣㅐ'),
+    ('ㅕ', 'ㅣㅓ'),
+    ('ㅖ', 'ㅣㅔ'),
+    ('ㅛ', 'ㅣㅗ'),
+    ('ㅠ', 'ㅣㅜ'),
 ]]
 
 # List of (Latin alphabet, hangul) pairs:
-_latin_to_hangul = [(re.compile('%s' % x[0], re.IGNORECASE), x[1]) for x in [
-  ('a', '에이'),
-  ('b', '비'),
-  ('c', '시'),
-  ('d', '디'),
-  ('e', '이'),
-  ('f', '에프'),
-  ('g', '지'),
-  ('h', '에이치'),
-  ('i', '아이'),
-  ('j', '제이'),
-  ('k', '케이'),
-  ('l', '엘'),
-  ('m', '엠'),
-  ('n', '엔'),
-  ('o', '오'),
-  ('p', '피'),
-  ('q', '큐'),
-  ('r', '아르'),
-  ('s', '에스'),
-  ('t', '티'),
-  ('u', '유'),
-  ('v', '브이'),
-  ('w', '더블유'),
-  ('x', '엑스'),
-  ('y', '와이'),
-  ('z', '제트')
+_latin_to_hangul = [(re.compile(f'{x[0]}', re.IGNORECASE), x[1]) for x in [
+    ('a', '에이'),
+    ('b', '비'),
+    ('c', '시'),
+    ('d', '디'),
+    ('e', '이'),
+    ('f', '에프'),
+    ('g', '지'),
+    ('h', '에이치'),
+    ('i', '아이'),
+    ('j', '제이'),
+    ('k', '케이'),
+    ('l', '엘'),
+    ('m', '엠'),
+    ('n', '엔'),
+    ('o', '오'),
+    ('p', '피'),
+    ('q', '큐'),
+    ('r', '아르'),
+    ('s', '에스'),
+    ('t', '티'),
+    ('u', '유'),
+    ('v', '브이'),
+    ('w', '더블유'),
+    ('x', '엑스'),
+    ('y', '와이'),
+    ('z', '제트'),
 ]]
 
 
@@ -152,12 +153,12 @@ def hangul_number(num, sino=True):
 
   digits = '123456789'
   names = '일이삼사오육칠팔구'
-  digit2name = {d: n for d, n in zip(digits, names)}
-  
+  digit2name = dict(zip(digits, names))
+
   modifiers = '한 두 세 네 다섯 여섯 일곱 여덟 아홉'
   decimals = '열 스물 서른 마흔 쉰 예순 일흔 여든 아흔'
-  digit2mod = {d: mod for d, mod in zip(digits, modifiers.split())}
-  digit2dec = {d: dec for d, dec in zip(digits, decimals.split())}
+  digit2mod = dict(zip(digits, modifiers.split()))
+  digit2dec = dict(zip(digits, decimals.split()))
 
   spelledout = []
   for i, digit in enumerate(num):
@@ -168,15 +169,14 @@ def hangul_number(num, sino=True):
       elif i == 1:
         name = digit2name.get(digit, '') + '십'
         name = name.replace('일십', '십')
-    else:
-      if i == 0:
-        name = digit2mod.get(digit, '')
-      elif i == 1:
-        name = digit2dec.get(digit, '')
+    elif i == 0:
+      name = digit2mod.get(digit, '')
+    elif i == 1:
+      name = digit2dec.get(digit, '')
     if digit == '0':
       if i % 4 == 0:
         last_three = spelledout[-min(3, len(spelledout)):]
-        if ''.join(last_three) == '':
+        if not ''.join(last_three):
           spelledout.append('')
           continue
       else:
@@ -217,7 +217,7 @@ def hangul_number(num, sino=True):
     elif i == 15:
       name = digit2name.get(digit, '') + '천'
     spelledout.append(name)
-  return ''.join(elem for elem in spelledout)
+  return ''.join(spelledout)
 
 
 def number_to_hangul(text):
@@ -265,19 +265,19 @@ def japanese_cleaners(text):
         text+=' '
       labels = pyopenjtalk.extract_fullcontext(sentence)
       for n, label in enumerate(labels):
-        phoneme = re.search(r'\-([^\+]*)\+', label).group(1)
+        phoneme = re.search(r'\-([^\+]*)\+', label)[1]
         if phoneme not in ['sil','pau']:
           text += phoneme.replace('ch','ʧ').replace('sh','ʃ').replace('cl','Q')
         else:
           continue
-        n_moras = int(re.search(r'/F:(\d+)_', label).group(1))
-        a1 = int(re.search(r"/A:(\-?[0-9]+)\+", label).group(1))
-        a2 = int(re.search(r"\+(\d+)\+", label).group(1))
-        a3 = int(re.search(r"\+(\d+)/", label).group(1))
-        if re.search(r'\-([^\+]*)\+', labels[n + 1]).group(1) in ['sil','pau']:
+        n_moras = int(re.search(r'/F:(\d+)_', label)[1])
+        a1 = int(re.search(r"/A:(\-?[0-9]+)\+", label)[1])
+        a2 = int(re.search(r"\+(\d+)\+", label)[1])
+        a3 = int(re.search(r"\+(\d+)/", label)[1])
+        if re.search(r'\-([^\+]*)\+', labels[n + 1])[1] in ['sil', 'pau']:
           a2_next=-1
         else:
-          a2_next = int(re.search(r"\+(\d+)\+", labels[n + 1]).group(1))
+          a2_next = int(re.search(r"\+(\d+)\+", labels[n + 1])[1])
         # Accent phrase boundary
         if a3 == 1 and a2_next == 1:
           text += ' '
@@ -306,19 +306,19 @@ def japanese_cleaners2(text):
         text+=' '
       labels = pyopenjtalk.extract_fullcontext(sentence)
       for n, label in enumerate(labels):
-        phoneme = re.search(r'\-([^\+]*)\+', label).group(1)
+        phoneme = re.search(r'\-([^\+]*)\+', label)[1]
         if phoneme not in ['sil','pau']:
           text += phoneme.replace('ch','ʧ').replace('sh','ʃ').replace('cl','Q').replace('ts','ʦ')
         else:
           continue
-        n_moras = int(re.search(r'/F:(\d+)_', label).group(1))
-        a1 = int(re.search(r"/A:(\-?[0-9]+)\+", label).group(1))
-        a2 = int(re.search(r"\+(\d+)\+", label).group(1))
-        a3 = int(re.search(r"\+(\d+)/", label).group(1))
-        if re.search(r'\-([^\+]*)\+', labels[n + 1]).group(1) in ['sil','pau']:
+        n_moras = int(re.search(r'/F:(\d+)_', label)[1])
+        a1 = int(re.search(r"/A:(\-?[0-9]+)\+", label)[1])
+        a2 = int(re.search(r"\+(\d+)\+", label)[1])
+        a3 = int(re.search(r"\+(\d+)/", label)[1])
+        if re.search(r'\-([^\+]*)\+', labels[n + 1])[1] in ['sil', 'pau']:
           a2_next=-1
         else:
-          a2_next = int(re.search(r"\+(\d+)\+", labels[n + 1]).group(1))
+          a2_next = int(re.search(r"\+(\d+)\+", labels[n + 1])[1])
         # Accent phrase boundary
         if a3 == 1 and a2_next == 1:
           text += ' '
