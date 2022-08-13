@@ -5,16 +5,15 @@ from pathlib import Path
 from torch import no_grad, LongTensor
 
 import commons
-import utils
+from utils import load_checkpoint, get_hparams_from_file
 from models import SynthesizerTrn
 from text import text_to_sequence
 from urllib.parse import unquote
 
 from scipy.io.wavfile import write
 
-model = str(Path(__file__).parent/'243_epochs.pth')
-config = str(Path(__file__).parent/'config.json')
-hps_ms = utils.get_hparams_from_file(config)
+
+hps_ms = get_hparams_from_file(str(Path(__file__).parent.parent/'config.json'))
 net_g_ms = SynthesizerTrn(
     len(hps_ms.symbols),
     hps_ms.data.filter_length // 2 + 1,
@@ -22,7 +21,8 @@ net_g_ms = SynthesizerTrn(
     n_speakers=hps_ms.data.n_speakers,
     **hps_ms.model)
 _ = net_g_ms.eval()
-_ = utils.load_checkpoint(model, net_g_ms, None)
+load_checkpoint(str(Path(__file__).parent.parent/'243_epochs.pth'), net_g_ms)
+
 
 def get_text(text, hps, cleaned=False):
     if cleaned:
@@ -33,6 +33,7 @@ def get_text(text, hps, cleaned=False):
         text_norm = commons.intersperse(text_norm, 0)
     text_norm = LongTensor(text_norm)
     return text_norm
+
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     text = req.params.get('text')

@@ -3,6 +3,4 @@
 local.settings.json
 test
 .venv
-/monotonic_align/build
-/monotonic_align/monotonic_align
-/monotonic_align/core.c
+.DS_Store

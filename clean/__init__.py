@@ -2,13 +2,13 @@ import azure.functions as func
 
 from pathlib import Path
 
-import utils
+from utils import get_hparams_from_file
 from text import _clean_text
 from urllib.parse import unquote
 
 
-config = str(Path(__file__).parent/'config.json')
-hps_ms = utils.get_hparams_from_file(config)
+cleanernames = get_hparams_from_file(str(Path(__file__).parent.parent/'config.json')).data.text_cleaners
+
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     text = req.params.get('text')
@@ -19,7 +19,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         )
     try:
         return func.HttpResponse(
-            _clean_text(unquote(text), hps_ms.data.text_cleaners),
+            _clean_text(unquote(text), cleanernames),
             status_code=200
         )
     except:
