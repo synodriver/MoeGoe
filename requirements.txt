@@ -7,12 +7,10 @@ azure-functions
 Cython
 librosa
 matplotlib
-numpy
-phonemizer
+numpy==1.22.4
 scipy
 Unidecode
-pyopenjtalk
-ffmpeg
+openjtalk>=0.3.0.dev2
 jamo
 -f https://download.pytorch.org/whl/torch_stable.html
-torch==1.12.0+cu116
+torch==1.12.0+cpu
