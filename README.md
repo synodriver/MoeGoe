@@ -13,7 +13,7 @@ return cleaned text in body
 ko↑rewa hI↑to↓tsU ka↑NtaNna te↓sUtodesU.
 ```
 
-> GET https://moegoe.azurewebsites.net/api/speak?cleantext=ko↑rewahIto↓tsU ka↑NtaNnate↓sUtode↓sU.&id=1
+> GET https://moegoe.azurewebsites.net/api/speak?cleantext=ko↑rewahIto↓tsUka↑NtaNnate↓sUtode↓sU.&id=1
 
 return wav file in body
 
