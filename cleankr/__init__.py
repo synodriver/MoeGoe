@@ -7,7 +7,7 @@ from text import _clean_text
 from urllib.parse import unquote
 
 
-cleanernames = get_hparams_from_file(str(Path(__file__).parent.parent/'confignenia.json')).data.text_cleaners
+cleanernames = get_hparams_from_file(str(Path(__file__).parent.parent/'configsuae.json')).data.text_cleaners
 
 
 def main(req: func.HttpRequest) -> func.HttpResponse:

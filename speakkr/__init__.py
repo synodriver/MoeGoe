@@ -13,7 +13,7 @@ from urllib.parse import unquote
 from scipy.io.wavfile import write
 
 
-hps_ms = get_hparams_from_file(str(Path(__file__).parent.parent/'confignenia.json'))
+hps_ms = get_hparams_from_file(str(Path(__file__).parent.parent/'configsuae.json'))
 net_g_ms = SynthesizerTrn(
     len(hps_ms.symbols),
     hps_ms.data.filter_length // 2 + 1,
@@ -21,7 +21,7 @@ net_g_ms = SynthesizerTrn(
     n_speakers=hps_ms.data.n_speakers,
     **hps_ms.model)
 _ = net_g_ms.eval()
-load_checkpoint(str(Path(__file__).parent.parent/'365_epochs.pth'), net_g_ms)
+load_checkpoint(str(Path(__file__).parent.parent/'417_epochs.pth'), net_g_ms)
 
 
 def get_text(text, hps, cleaned=False):

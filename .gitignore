@@ -372,6 +372,8 @@ monotonic_align/core.c
 # data
 /config.json
 /*.pth
+/confignenia.json
+/configsuae.json
 *.wav
 
 # Byte-compiled / optimized / DLL files
