@@ -2,6 +2,7 @@ import logging
 from json import loads
 from torch import load
 import logging
+from av import open as avopen
 
 
 class HParams():
@@ -67,3 +68,19 @@ def get_hparams_from_file(config_path):
 
   hparams = HParams(**config)
   return hparams
+
+def wav2mp3(i, o):
+    inp = avopen(i, 'rb')
+    out = avopen(o, 'wb', format="mp3")
+    ostream = out.add_stream("mp3")
+
+    for frame in inp.decode(audio=0):
+        frame.pts = None
+
+        for p in ostream.encode(frame):
+            out.mux(p)
+
+    for p in ostream.encode(None):
+        out.mux(p)
+
+    out.close()
