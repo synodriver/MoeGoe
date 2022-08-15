@@ -11,6 +11,7 @@ from text import text_to_sequence, _clean_text
 from urllib.parse import unquote
 
 from scipy.io.wavfile import write
+import soundfile
 
 
 class Cleaner():
@@ -94,8 +95,8 @@ class Speaker():
                 status_code=400
             )
         format = req.params.get('format')
-        if not format: format = "mp3"
-        if format not in ("wav", "mp3"):
+        if not format: format = "ogg"
+        if format not in ("ogg", "mp3", "wav"):
             return func.HttpResponse(
                 "400 BAD REQUEST: invalid format",
                 status_code=400
@@ -107,25 +108,41 @@ class Speaker():
                 "400 BAD REQUEST: invalid text",
                 status_code=400
             )
-        with no_grad():
-            x_tst = stn_tst.unsqueeze(0)
-            x_tst_lengths = LongTensor([stn_tst.size(0)])
-            sid = LongTensor([speaker_id])
-            audio = self.net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=1)[0][0,0].data.cpu().float().numpy()
-            with BytesIO() as f:
-                write(f, self.hps_ms.data.sampling_rate, audio)
-                if format == "wav":
-                    return func.HttpResponse(
-                        f.getvalue(),
-                        status_code=200,
-                        mimetype="audio/wav",
-                    )
-                elif format == "mp3":
-                    f.seek(0, 0)
-                    with BytesIO() as ofp:
-                        wav2mp3(f, ofp)
+        try:
+            with no_grad():
+                x_tst = stn_tst.unsqueeze(0)
+                x_tst_lengths = LongTensor([stn_tst.size(0)])
+                sid = LongTensor([speaker_id])
+                audio = self.net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=1)[0][0,0].data.cpu().float().numpy()
+                with BytesIO() as f:
+                    write(f, self.hps_ms.data.sampling_rate, audio)
+                    if format == "ogg":
+                        f.seek(0, 0)
+                        data, sr = soundfile.read(f)
+                        with BytesIO() as ofp:
+                            soundfile.write(ofp, data, sr, format='OGG')
+                            return func.HttpResponse(
+                                ofp.getvalue(),
+                                status_code=200,
+                                mimetype="audio/ogg",
+                            )
+                    elif format == "mp3":
+                        f.seek(0, 0)
+                        with BytesIO() as ofp:
+                            wav2mp3(f, ofp)
+                            return func.HttpResponse(
+                                ofp.getvalue(),
+                                status_code=200,
+                                mimetype="audio/mpeg",
+                            )
+                    elif format == "wav":
                         return func.HttpResponse(
-                            ofp.getvalue(),
+                            f.getvalue(),
                             status_code=200,
-                            mimetype="audio/mpeg",
+                            mimetype="audio/wav",
                         )
+        except Exception as e:
+            return func.HttpResponse(
+                        "500 Internal Server Error\n"+str(e),
+                        status_code=500,
+                    )
