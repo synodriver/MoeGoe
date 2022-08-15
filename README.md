@@ -7,7 +7,7 @@ See [MoeGoe](https://github.com/CjangCjengh/MoeGoe)
 
 - GET https://moegoe.azurewebsites.net/api/speak?text=これは一つ簡単なテストです&id=0
 
-return wav file in body
+return ogg file in body
 
 - GET https://moegoe.azurewebsites.net/api/clean?text=これは一つ簡単なテストです
 
@@ -19,7 +19,7 @@ ko↑rewa hI↑to↓tsU ka↑NtaNna te↓sUtodesU.
 
 - GET https://moegoe.azurewebsites.net/api/speak?cleantext=ko↑rewahI↑totsUka↑NtaNnate↓sUtodesU.&id=1
 
-return wav file in body
+return ogg file in body
 
 |  ID   | Speaker  |
 |  ----  | ----  |
@@ -37,7 +37,7 @@ return wav file in body
 
 - GET https://moegoe.azurewebsites.net/api/speakkr?text=이것은%20간단한%20테스트이다&id=0
 
-return wav file in body
+return ogg file in body
 
 - GET https://moegoe.azurewebsites.net/api/cleankr?text=이것은%20간단한%20테스트이다
 
@@ -49,7 +49,7 @@ return cleaned text in body
 
 - GET https://moegoe.azurewebsites.net/api/speakkr?cleantext=ㅇㅣㄱㅓㅅㅇㅡㄴ%20ㄱㅏㄴㄷㅏㄴㅎㅏㄴ%20ㅌㅔㅅㅡㅌㅡㅇㅣㄷㅏ.&id=1
 
-return wav file in body
+return ogg file in body
 
 |  ID   | Speaker  |
 |  ----  | ----  |
@@ -59,3 +59,8 @@ return wav file in body
 | 3 | 연화 |
 | 4 | 유화 |
 | 5 | 선배 |
+
+## Optional Paramneters
+
+### speak
+- **format**: ogg(default), mp3 or wav
