@@ -12,3 +12,5 @@ openjtalk>=0.3.0.dev2
 jamo
 av
 pysoundfile
+-f https://download.pytorch.org/whl/torch_stable.html
+torch==1.12.0+cpu
