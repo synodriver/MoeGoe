@@ -60,7 +60,7 @@ return ogg file in body
 | 4 | 유화 |
 | 5 | 선배 |
 
-## Optional Paramneters
+## Optional Parameters
 
 ### speak
 - **format**: ogg(default), mp3 or wav
