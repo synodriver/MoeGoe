@@ -5,13 +5,12 @@ from pathlib import Path
 from torch import no_grad, LongTensor
 
 import commons
-from utils import load_checkpoint, get_hparams_from_file, wav2mp3
+from utils import load_checkpoint, get_hparams_from_file, wav2
 from models import SynthesizerTrn
 from text import text_to_sequence, _clean_text
 from urllib.parse import unquote
 
 from scipy.io.wavfile import write
-import soundfile
 
 
 class Cleaner():
@@ -116,31 +115,21 @@ class Speaker():
                 audio = self.net_g_ms.infer(x_tst, x_tst_lengths, sid=sid, noise_scale=.667, noise_scale_w=0.8, length_scale=1)[0][0,0].data.cpu().float().numpy()
                 with BytesIO() as f:
                     write(f, self.hps_ms.data.sampling_rate, audio)
-                    if format == "ogg":
-                        f.seek(0, 0)
-                        data, sr = soundfile.read(f)
-                        with BytesIO() as ofp:
-                            soundfile.write(ofp, data, sr, format='OGG')
-                            return func.HttpResponse(
-                                ofp.getvalue(),
-                                status_code=200,
-                                mimetype="audio/ogg",
-                            )
-                    elif format == "mp3":
-                        f.seek(0, 0)
-                        with BytesIO() as ofp:
-                            wav2mp3(f, ofp)
-                            return func.HttpResponse(
-                                ofp.getvalue(),
-                                status_code=200,
-                                mimetype="audio/mpeg",
-                            )
-                    elif format == "wav":
+                    if format == "wav":
                         return func.HttpResponse(
                             f.getvalue(),
                             status_code=200,
                             mimetype="audio/wav",
                         )
+                    else:
+                        f.seek(0, 0)
+                        with BytesIO() as ofp:
+                            wav2(f, ofp, format)
+                            return func.HttpResponse(
+                                ofp.getvalue(),
+                                status_code=200,
+                                mimetype="audio/mpeg" if format == "mp3" else "audio/ogg",
+                            )
         except Exception as e:
             return func.HttpResponse(
                         "500 Internal Server Error\n"+str(e),

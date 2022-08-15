@@ -69,18 +69,16 @@ def get_hparams_from_file(config_path):
   hparams = HParams(**config)
   return hparams
 
-def wav2mp3(i, o):
-    inp = avopen(i, 'rb')
-    out = avopen(o, 'wb', format="mp3")
-    ostream = out.add_stream("mp3")
+def wav2(i, o, format):
+  inp = avopen(i, 'rb')
+  out = avopen(o, 'wb', format=format)
+  if format == "ogg": format = "libvorbis"
 
-    for frame in inp.decode(audio=0):
-        frame.pts = None
+  ostream = out.add_stream(format)
 
-        for p in ostream.encode(frame):
-            out.mux(p)
+  for frame in inp.decode(audio=0):
+      for p in ostream.encode(frame): out.mux(p)
 
-    for p in ostream.encode(None):
-        out.mux(p)
+  for p in ostream.encode(None): out.mux(p)
 
-    out.close()
+  out.close()
