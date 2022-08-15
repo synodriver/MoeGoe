@@ -127,5 +127,5 @@ class Speaker():
                         return func.HttpResponse(
                             ofp.getvalue(),
                             status_code=200,
-                            mimetype="audio/mp3",
+                            mimetype="audio/mpeg",
                         )
