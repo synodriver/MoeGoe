@@ -82,3 +82,4 @@ def wav2(i, o, format):
   for p in ostream.encode(None): out.mux(p)
 
   out.close()
+  inp.close()
