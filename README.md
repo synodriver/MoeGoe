@@ -18,42 +18,70 @@ Download [Config File](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_
 Download [Model](https://sjtueducn-my.sharepoint.com/:u:/g/personal/cjang_cjengh_sjtu_edu_cn/ESfLsfGbqbJJkC6NmZ5R1TkBbVLvTLeLG3u8jB2UfA4jtQ?e=cpw40v) (417 epochs)
 # How to use
 Run MoeGoe.exe
+
+# MoeGoe Azure Cloud Function API
+See [MoeGoe](https://github.com/CjangCjengh/MoeGoe)
+
+## Japanese
+
+> Nene + Meguru + Yoshino + Mako + Murasame + Koharu + Nanami
+
+- GET https://moegoe.azurewebsites.net/api/speak?text=これは一つ簡単なテストです&id=0
+
+return ogg file in body
+
+- GET https://moegoe.azurewebsites.net/api/clean?text=これは一つ簡単なテストです
+
+return cleaned text in body
+
 ```
-Path of a VITS model: D:\Download\243_epochs.pth
-Path of a config file: D:\Download\config.json
-INFO:root:Loaded checkpoint 'D:\Download\243_epochs.pth' (iteration 243)
+ko↑rewa hI↑to↓tsU ka↑NtaNna te↓sUtodesU.
 ```
-## Text to speech
+
+- GET https://moegoe.azurewebsites.net/api/speak?cleantext=ko↑rewahI↑totsUka↑NtaNnate↓sUtodesU.&id=1
+
+return ogg file in body
+
+|  ID   | Speaker  |
+|  ----  | ----  |
+| 0 | 綾地寧々 |
+| 1 | 因幡めぐる |
+| 2 | 朝武芳乃 |
+| 3 | 常陸茉子 |
+| 4 | ムラサメ |
+| 5 | 鞍馬小春 |
+| 6 | 在原七海 |
+
+## Korean
+
+> Sua + Mimiru + Arin + Yeonhwa + Yuhwa + Seonbae
+
+- GET https://moegoe.azurewebsites.net/api/speakkr?text=이것은%20간단한%20테스트이다&id=0
+
+return ogg file in body
+
+- GET https://moegoe.azurewebsites.net/api/cleankr?text=이것은%20간단한%20테스트이다
+
+return cleaned text in body
+
 ```
-TTS or VC? (t/v):t
-Text to read: こんにちは。
-ID      Speaker
-0       綾地寧々
-1       因幡めぐる
-2       朝武芳乃
-3       常陸茉子
-4       ムラサメ
-5       鞍馬小春
-6       在原七海
-Speaker ID: 0
-Path to save: demo.wav
-Successfully saved!
+ㅇㅣㄱㅓㅅㅇㅡㄴ ㄱㅏㄴㄷㅏㄴㅎㅏㄴ ㅌㅔㅅㅡㅌㅡㅇㅣㄷㅏ.
 ```
-## Voice conversion
-```
-TTS or VC? (t/v):v
-Path of a WAV file (22050 Hz, 16 bits, 1 channel) to convert:
-D:\dataset\ayachi_nene\nen001_001.wav
-ID      Speaker
-0       綾地寧々
-1       因幡めぐる
-2       朝武芳乃
-3       常陸茉子
-4       ムラサメ
-5       鞍馬小春
-6       在原七海
-Original speaker ID: 0
-Target speaker ID: 6
-Path to save: demo.wav
-Successfully saved!
-```
+
+- GET https://moegoe.azurewebsites.net/api/speakkr?cleantext=ㅇㅣㄱㅓㅅㅇㅡㄴ%20ㄱㅏㄴㄷㅏㄴㅎㅏㄴ%20ㅌㅔㅅㅡㅌㅡㅇㅣㄷㅏ.&id=1
+
+return ogg file in body
+
+|  ID   | Speaker  |
+|  ----  | ----  |
+| 0 | 수아 |
+| 1 | 미미르 |
+| 2 | 아린 |
+| 3 | 연화 |
+| 4 | 유화 |
+| 5 | 선배 |
+
+## Optional Parameters
+
+### speak
+- **format**: ogg(default), mp3 or wav
