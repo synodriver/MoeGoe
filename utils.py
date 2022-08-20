@@ -72,7 +72,7 @@ def get_hparams_from_file(config_path):
     return hparams
 
 
-def wav2(i, o, format):
+def wav2(i, o, format: str):
     inp = avopen(i, "rb")
     out = avopen(o, "wb", format=format)
     if format == "ogg":
